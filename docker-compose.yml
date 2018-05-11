@@ -1,0 +1,16 @@
+version: '2.2'
+services:
+  web:
+    build: .
+    container_name: web01
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn app.wsgi -b 0.0.0.0:8000"
+    depends_on:
+      - db
+    volumes:
+      - ./src:/src
+      - ./config:/config
+    ports:
+      - "8000:8000"
+  db:
+    image: postgres:latest
+    container_name: pg01
